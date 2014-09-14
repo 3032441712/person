@@ -12,12 +12,21 @@ use Db\Local;
 class User
 {
 
-    public static function getList()
+    /**
+     * 获取用户列表
+     *
+     * @param int $page
+     *            当前页
+     * @param int $limit
+     *            每页数据显示条数
+     * @return array
+     */
+    public static function getList($page = 1, $limit = 10)
     {
         $sql = 'SELECT {FIELD} FROM z_users';
         $field = 'user_id,user_name,user_sex,user_email,user_address,createtime,last_login_time';
         $total = Local::fetchOne(str_replace('{FIELD}', 'COUNT(1) as total', $sql));
-        $data = Local::fetchAll(str_replace('{FIELD}', $field, $sql));
+        $data = Local::fetchAll(str_replace('{FIELD}', $field, $sql) . ' LIMIT ' . ($page - 1) * $limit . ',' . $limit);
         
         return array(
             'total' => $total['total'],
@@ -34,9 +43,11 @@ class User
      */
     public static function getUserDataById($id)
     {
-        return Local::fetchOne('SELECT * FROM z_users WHERE user_id=:user_id LIMIT 1', array(
+        $data = Local::fetchOne('SELECT * FROM z_users WHERE user_id=:user_id LIMIT 1', array(
             ':user_id' => $id
         ));
+
+        return $data;
     }
 
     /**
@@ -64,7 +75,7 @@ class User
     {
         $data = array();
         foreach (Local::fetchAll('DESC z_users') as $k => $v) {
-            $data[$v['Field']] = $v['Default'] == null ? '' : $v['Default'];
+            $data[$v['Field']] = ($v['Default'] == null || $v['Default'] == 0 ? '' : $v['Default']);
         }
         return $data;
     }
@@ -110,5 +121,140 @@ class User
         
         $statement = Local::query($sql, $inputParams);
         $statement->closeCursor();
+    }
+
+    /**
+     * 验证登录用户名
+     *
+     * @param string $username
+     *            数据字符串
+     * @param int $min
+     *            最小长度
+     * @param int $max
+     *            最大长度
+     * @return bool true/false
+     */
+    public static function isUsername($username, $min = 5, $max = 32)
+    {
+        return preg_match("/^[a-zA-Z0-9_-]{{$min},{$max}}$/", $username);
+    }
+
+    /**
+     * 验证登录密码
+     *
+     * @param string $password
+     *            数据字符串
+     * @param int $min
+     *            最小长度
+     * @param int $max
+     *            最大长度
+     * @return bool true/false
+     */
+    public static function isPassword($password, $min = 5, $max = 32)
+    {
+        return preg_match("/^[a-zA-Z0-9]{{$min},{$max}}$/", $password);
+    }
+
+    /**
+     * 验证用户真实姓名是否符合规则
+     *
+     * @param string $realname
+     *            数据字符
+     * @return bool true/false
+     */
+    public static function isRealName($realname)
+    {
+        $strlen = mb_strlen($realname, 'utf-8');
+        return ($strlen > 32 || $strlen < 1) ? false : true;
+    }
+
+    /**
+     * 验证性别是否符合规则
+     *
+     * @param int $sex
+     *            字符数据
+     * @return true/false
+     */
+    public static function isSex($sex)
+    {
+        return array_search(intval($sex), array(0,1));
+    }
+
+    /**
+     * 验证年龄是否符合规则
+     *
+     * @param int $age
+     *            字符数据
+     * @return bool true/false
+     */
+    public static function isAge($age)
+    {
+        $age = intval($age);
+        return $age > 16 && $age < 100 ? true : false;
+    }
+
+    /**
+     * 验证邮箱是否符合规则
+     *
+     * @param string $email
+     *            用户邮箱
+     * @param int $min
+     *            最小长度
+     * @param int $max
+     *            最大长度
+     * @return bool true/false
+     */
+    public static function isEmail($email, $min = 5, $max = 64)
+    {
+        $strlen = mb_strlen($email, 'utf-8');
+        if ($strlen < $min || $strlen > $max) {
+            return false;
+        }
+        
+        return preg_match("/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/", $email);
+    }
+
+    /**
+     * 验证座机是否符合规则
+     *
+     * @param string $phone
+     *            固定电话
+     * @param int $min
+     *            最小长度
+     * @param int $max
+     *            最大长度
+     * @return bool true/false
+     */
+    public static function isPhone($phone, $min = 7, $max = 8)
+    {
+        return preg_match("/^(0\d{2,3}-\d{{$min},{$max}})$/", $phone);
+    }
+
+    /**
+     * 验证手机是否符合规则
+     *
+     * @param int $mobile
+     *            字符数据
+     * @return bool true/false
+     */
+    public static function isMobile($mobile)
+    {
+        return preg_match("/^(1[3584]\d{9})$/", $mobile);
+    }
+
+    /**
+     * 验证QQ号是否符合规则
+     * 
+     * @param int $qq
+     *            字符数据
+     * @param int $min
+     *            最小长度
+     * @param int $max
+     *            最大长度
+     * @return bool true/false
+     */
+    public static function isQQ($qq, $min = 5, $max = 13)
+    {
+        return preg_match("/^(\d){{$min},{$max}}$/", $qq);
     }
 }

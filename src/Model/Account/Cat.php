@@ -72,8 +72,8 @@ class Cat
         ));
         
         if ($hasChildren['total'] > 0) {
-        	echo '{"code":"1", "msg":"该分类下还有分类,请先删除子分类."}';
-        	exit(0);
+            echo '{"code":"1", "msg":"该分类下还有分类,请先删除子分类."}';
+            exit(0);
         }
         
         $statement = Local::query('DELETE FROM z_account_cats WHERE cat_id=:cat_id', array(
@@ -159,5 +159,17 @@ class Cat
         }
         
         return $childrens;
+    }
+
+    /**
+     * 验证分类的标题是否符合规则
+     * 
+     * @param string $title
+     *            字符数据
+     * @return bool true/false
+     */
+    public static function isCatTitle($title, $min = 1, $max = 12)
+    {
+        return preg_match("/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]{{$min},{$max}}$/u", $title);
     }
 }

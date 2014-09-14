@@ -17,11 +17,23 @@ if ($act == 'save') {
     );
     
     $data = array_map('trim', $data);
+
+    if (Account::isCat($data['account_cat']) == false) {
+        echo '{"code":"1","msg":"选择的分类有误,请重新选择."}';
+        exit(0);
+    }
+    
+    if (Account::isAccountTitle($data['account_title']) == false) {
+        echo '{"code":"1","msg":"输入的帐号标题有误,请重新输入."}';
+        exit(0);
+    }
+
     $data['account_content'] = $encrypt->encode($data['account_content']);
     if ($eid > 0) {
     	$account = Account::getAccountById('*', $eid);
     	if (isset($account['account_id']) == false) {
     	    echo '{"code":"1","msg":"要更新的数据没有被找到"}';
+    	    exit(0);
     	}
     	
     	foreach ($data as $k => $v) {

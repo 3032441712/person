@@ -35,7 +35,7 @@ class Account
 
     /**
      * 更新账户信息
-     * 
+     *
      * @param array $data
      *            要更新的数据
      * @param int $id
@@ -60,14 +60,18 @@ class Account
     /**
      * 获取账户信息列表
      *
+     * @param int $page
+     *            当前页
+     * @param int $limit
+     *            每页显示数据条数
      * @return array
      */
-    public static function getList()
+    public static function getList($page = 1, $limit = 10)
     {
         $sql = 'SELECT {FIELD} FROM z_accounts a LEFT JOIN z_account_cats c ON a.account_cat=c.cat_id LEFT JOIN z_users u ON a.user_id=u.user_id';
         $field = 'a.account_id,a.account_title,a.account_cat,a.user_id,a.acount_status,a.createtime,c.cat_title,u.user_name';
         $total = Local::fetchOne(str_replace('{FIELD}', 'COUNT(1) as total', $sql));
-        $data = Local::fetchAll(str_replace('{FIELD}', $field, $sql));
+        $data = Local::fetchAll(str_replace('{FIELD}', $field, $sql) . ' LIMIT ' . ($page - 1) * $limit . ',' . $limit);
         
         return array(
             'total' => $total['total'],
@@ -101,5 +105,33 @@ class Account
             $data[$v['Field']] = $v['Default'] == null ? '' : $v['Default'];
         }
         return $data;
+    }
+
+    /**
+     * 验证分类是否符合规则
+     *
+     * @param int $catid
+     *            分类ID
+     * @return bool true/false
+     */
+    public static function isCat($catid)
+    {
+        return $catid;
+    }
+
+    /**
+     * 验证标题
+     *
+     * @param string $account_title
+     *            帐号标题
+     * @param int $min
+     *            最小长度
+     * @param int $max
+     *            最大长度
+     * @return bool true/false
+     */
+    public static function isAccountTitle($account_title, $min = 1, $max = 32)
+    {
+        return preg_match("/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]{{$min},{$max}}$/u", $account_title);
     }
 }

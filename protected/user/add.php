@@ -10,13 +10,67 @@ if ($act == 'save') {
         'user_name' => isset($userData['name']) ? $userData['name'] : '',
         'user_pass' => isset($userData['pass']) && $userData['pass'] != '' ? md5($userData['pass']) : '',
         'user_real_name' => isset($userData['real_name']) ? $userData['real_name'] : '',
-        'user_sex' => isset($userData['sex']) ? $userData['sex'] : '',
-        'user_age' => isset($userData['age']) ? $userData['age'] : '',
+        'user_sex' => isset($userData['sex']) && $userData['sex'] != '' ? $userData['sex'] : 1,
+        'user_age' => isset($userData['age']) && $userData['age'] != '' ? $userData['age'] : 0,
         'user_email' => isset($userData['email']) ? $userData['email'] : '',
-        'user_qq' => isset($userData['qq']) ? $userData['qq'] : '',
-        'user_phone' => isset($userData['phone']) ? $userData['phone'] : '',
-        'user_mobile' => isset($userData['mobile']) ? $userData['mobile'] : ''
+        'user_qq' => isset($userData['qq']) && $userData['qq'] != '' ? $userData['qq'] : 0,
+        'user_phone' => isset($userData['phone']) && $userData['phone'] != '' ? $userData['phone'] : 0,
+        'user_mobile' => isset($userData['mobile']) && $userData['mobile'] != '' ? $userData['mobile'] : 0
     );
+    //去除数据两侧空字符
+    $data = array_map('trim', $data);
+
+    if (User::isUsername($data['user_name']) == false) {
+        echo '{"code":"1","msg":"用户名不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($eid > 0) {
+        if ($data['user_pass'] != '' && User::isPassword($data['user_pass']) == false) {
+            echo '{"code":"1","msg":"密码不符合规则,请重新输入."}';
+            exit(0);
+        }
+    } else {
+        if (User::isPassword($data['user_pass']) == false) {
+            echo '{"code":"1","msg":"密码不符合规则,请重新输入."}';
+            exit(0);
+        }
+    }
+
+    if ($data['user_real_name'] != '' && User::isRealName($data['user_real_name']) == false) {
+        echo '{"code":"1","msg":"输入的名字不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($data['user_sex'] != '' && User::isSex($data['user_sex']) == false) {
+        echo '{"code":"1","msg":"输入的性别不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($data['user_age'] != 0 && User::isAge($data['user_age']) == false) {
+        echo '{"code":"1","msg":"输入的年龄不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($data['user_email'] != '' && User::isEmail($data['user_email']) == false) {
+        echo '{"code":"1","msg":"输入的邮箱不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($data['user_qq'] != 0 && User::isQQ($data['user_qq']) == false) {
+        echo '{"code":"1","msg":"输入的QQ不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($data['user_phone'] != 0 && User::isPhone($data['user_phone']) == false) {
+        echo '{"code":"1","msg":"输入的座机电话不符合规则,请重新输入."}';
+        exit(0);
+    }
+
+    if ($data['user_mobile'] != 0 && User::isMobile($data['user_mobile']) == false) {
+        echo '{"code":"1","msg":"输入的手机号不符合规则,请重新输入."}';
+        exit(0);
+    }
 
     if ($eid > 0) {
         $user = User::getUserDataById($eid);
@@ -24,13 +78,13 @@ if ($act == 'save') {
             echo '{"code":"1","msg":"没有找到该用户."}';
             exit(0);
         }
-        
+
         //密码为空,那么不对该数据进行编辑
         if ($data['user_pass'] == '') {
         	unset($data['user_pass']);
         }
 
-        //去除为更新数据.
+        //去除未更新数据.
         foreach ($data as $k => $v) {
             if ($user[$k] == $v) {
                 unset($data[$k]);
@@ -56,6 +110,10 @@ if ($act == 'save') {
 $formData = array();
 if ($eid != '') {
     $formData = User::getUserDataById($eid);
+    $formData['user_age'] = ($formData['user_age'] == 0 ? '' : $formData['user_age']);
+    $formData['user_qq'] = ($formData['user_qq'] == 0 ? '' : $formData['user_qq']);
+    $formData['user_phone'] = ($formData['user_phone'] == 0 ? '' : $formData['user_phone']);
+    $formData['user_mobile'] = ($formData['user_mobile'] == 0 ? '' : $formData['user_mobile']);
 } else {
     $formData = User::getTableAttribute();
 }
@@ -64,7 +122,7 @@ if ($eid != '') {
 	<div id="user_action">
 		<div class="field-line">
 			<div class="field-left">
-				<label>登录用户</label> <input <?php if (isset($formData['user_name'])):?>readonly="readonly"<?php endif;?> type="text" name="user[name]" value="<?php echo $formData['user_name']?>" />
+				<label>登录用户</label> <input <?php if (isset($formData['user_name']) && $formData['user_name'] != ''):?>readonly="readonly"<?php endif;?> type="text" name="user[name]" value="<?php echo $formData['user_name']?>" />
 			</div>
 			<div class="field-right">
 				<label>登录密码</label> <input type="password" name="user[pass]" value="" />

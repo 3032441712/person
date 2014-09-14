@@ -24,9 +24,13 @@ if ($act == 'add') {
         'cat_title' => isset($data['title']) ? $data['title'] : '',
         'cat_parent' => isset($data['parent_id']) ? $data['parent_id'] : ''
     );
-    
+
     $saveData = array_map('trim', $saveData);
-    
+    if (Cat::isCatTitle($saveData['cat_title']) == false) {
+        echo '{"code":"1","msg":"分类名称填写有误,请重新填写."}';
+        exit(0);
+    }
+
     if ($catId > 0) {
         $catData = Cat::getCatsDataById('cat_id,cat_title', $catId);
         unset($saveData['cat_parent']);
@@ -34,7 +38,7 @@ if ($act == 'add') {
             echo '{"code":"1","msg":"数据未更改"}';
             exit(0);
         }
-        
+
         Cat::update($saveData, $catId);
     } else {
         Cat::insert($saveData);

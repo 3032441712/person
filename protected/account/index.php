@@ -2,7 +2,22 @@
 use Model\Account;
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 if ($act == 'data') {
-    $accountData = Account::getList();
+    $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+    $limit = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+    
+    if ($page < 1) {
+        $page = 1;
+    }
+    
+    if ($limit < 10) {
+        $limit = 10;
+    }
+    
+    if ($limit > 50) {
+        $limit = 50;
+    }
+    
+    $accountData = Account::getList($page, $limit);
     echo json_encode($accountData);
     exit(0);
 }
