@@ -1,23 +1,38 @@
 <?php
 /**
  * 用户信息处理模型
- * @package Model
- * @author  zhaoyan
- * @version 1.0 
+ *
+ * PHP version 5.4
+ *
+ * @category Model
+ * @package  Model
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168heps License
+ * @version  GIT: $Id
+ * @link     http://www.168helps.com/blog
  */
 namespace Model;
 
 use Db\Local;
 
+/**
+ * Account 类
+ *
+ * @category Model
+ * @package  Model
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license 168heps License
+ * @link     http://www.168helps.com/blog
+ */
 class Account
 {
 
     /**
      * 保存账户信息到数据库
      *
-     * @param array $data
-     *            账户数据
-     * @return int 主键ID
+     * @param array $data 账户数据
+     *
+     * @return int
      */
     public static function insert(array $data)
     {
@@ -36,10 +51,9 @@ class Account
     /**
      * 更新账户信息
      *
-     * @param array $data
-     *            要更新的数据
-     * @param int $id
-     *            数据ID
+     * @param array $data 要更新的数据
+     * @param int   $id   数据ID
+     *
      * @return void
      */
     public static function update($data, $id)
@@ -60,10 +74,9 @@ class Account
     /**
      * 获取账户信息列表
      *
-     * @param int $page
-     *            当前页
-     * @param int $limit
-     *            每页显示数据条数
+     * @param int $page  当前页
+     * @param int $limit 每页显示数据条数
+     *
      * @return array
      */
     public static function getList($page = 1, $limit = 10)
@@ -82,8 +95,9 @@ class Account
     /**
      * 根据账户ID获取单条数据记录
      *
-     * @param int $account_id
-     *            账户ID主键
+     * @param string $field      检索的字段
+     * @param int    $account_id 账户ID主键
+     *
      * @return array
      */
     public static function getAccountById($field = '*', $account_id)
@@ -110,8 +124,8 @@ class Account
     /**
      * 验证分类是否符合规则
      *
-     * @param int $catid
-     *            分类ID
+     * @param int $catid 分类ID
+     *
      * @return bool true/false
      */
     public static function isCat($catid)
@@ -122,12 +136,10 @@ class Account
     /**
      * 验证标题
      *
-     * @param string $account_title
-     *            帐号标题
-     * @param int $min
-     *            最小长度
-     * @param int $max
-     *            最大长度
+     * @param string $account_title 帐号标题
+     * @param int    $min           最小长度
+     * @param int    $max           最大长度
+     *
      * @return bool true/false
      */
     public static function isAccountTitle($account_title, $min = 1, $max = 32)

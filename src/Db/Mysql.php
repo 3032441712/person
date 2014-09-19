@@ -1,12 +1,27 @@
 <?php
 /**
- * 自定义MYSQL操作类库
- * @package Db
- * @author zhaoyan<1210965963@qq.com>
- * @version 1.0 
+ * MYSQL操作类
+ *
+ * PHP version 5.4
+ *
+ * @category Db
+ * @package  Db
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt  168heps License
+ * @version  GIT: $Id
+ * @link     http://www.168helps.com/blog
  */
 namespace Db;
 
+/**
+ * Mysql类
+ *
+ * @category Db
+ * @package  Db
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168helps License
+ * @link     http://www.168helps.com/blog
+ */
 final class Mysql
 {
 
@@ -19,18 +34,13 @@ final class Mysql
     /**
      * 实例化数据库
      *
-     * @param string $dbhost
-     *            MYSQL主机地址
-     * @param string $dbport
-     *            MYSQL主机端口
-     * @param string $dbuser
-     *            MYSQL用户
-     * @param string $dbpass
-     *            MYSQL密码
-     * @param string $dbname
-     *            MYSQL数据库
-     * @param string $charset
-     *            数据库编码
+     * @param string $dbhost  MYSQL主机地址
+     * @param string $dbport  MYSQL主机端口
+     * @param string $dbuser  MYSQL用户
+     * @param string $dbpass  MYSQL密码
+     * @param string $dbname  MYSQL数据库
+     * @param string $charset 数据库编码
+     *
      * @return void
      */
     public function __construct($dbhost, $dbport, $dbuser, $dbpass, $dbname, $charset = 'utf8')
@@ -48,12 +58,10 @@ final class Mysql
     /**
      * 获取单条数据
      *
-     * @param string $sql
-     *            执行的sql语句
-     * @param array $input_parameters
-     *            预处理数据
-     * @param int $fetch_style
-     *            数据检索出来的数据格式
+     * @param string $sql              执行的sql语句
+     * @param array  $input_parameters 预处理数据
+     * @param int    $fetch_style      数据检索出来的数据格式
+     *
      * @return array
      */
     public function fetchOne($sql, $input_parameters = array(), $fetch_style = \PDO::FETCH_ASSOC)
@@ -68,12 +76,10 @@ final class Mysql
     /**
      * 获取多条数据
      *
-     * @param string $sql
-     *            执行的sql语句
-     * @param array $input_parameters
-     *            预处理数据
-     * @param int $fetch_style
-     *            数据检索出来的数据格式
+     * @param string $sql              执行的sql语句
+     * @param array  $input_parameters 预处理数据
+     * @param int    $fetch_style      数据检索出来的数据格式
+     *
      * @return array
      */
     public function fetchAll($sql, $input_parameters = array(), $fetch_style = \PDO::FETCH_ASSOC)
@@ -85,6 +91,11 @@ final class Mysql
         return $data;
     }
 
+    /**
+     * 返回最后插入数据的主键
+     *
+     * @return int
+     */
     public function getLastInsertId()
     {
         return $this->dbLink->lastInsertId();
@@ -92,6 +103,9 @@ final class Mysql
 
     /**
      * 执行SQL语句
+     *
+     * @param string $sql              执行的SQL语句
+     * @param array  $input_parameters 数据参数
      *
      * @return \PDOStatement
      */
@@ -113,6 +127,11 @@ final class Mysql
         return $this->dbLink->beginTransaction();
     }
 
+    /**
+     * 事物回滚
+     *
+     * @return bool true/false
+     */
     public function rollBack()
     {
         return $this->dbLink->rollBack();
@@ -148,6 +167,11 @@ final class Mysql
         $this->dbLink = null;
     }
 
+    /**
+     * 析构函数
+     *
+     * @return void
+     */
     public function __destruct()
     {
         $this->close();

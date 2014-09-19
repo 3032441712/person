@@ -1,12 +1,27 @@
 <?php
 /**
  * 数据加密类
- * @package Encrypt
- * @author zhaoyan<1210965963@qq.com>
- * @version 1.0
+ *
+ * PHP version 5.4
+ *
+ * @category Encrypt
+ * @package  Encrypt
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168helps License
+ * @version  GIT: $Id
+ * @link     http://www.168helps.com/blog
  */
 namespace Encrypt;
 
+/**
+ * Data类
+ *
+ * @category Encrypt
+ * @package  Encrypt
+ * @author   zhaoyan <1210965863@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168helps License
+ * @link     http://www.168helps.com/blog
+ */
 class Data
 {
 
@@ -18,7 +33,14 @@ class Data
 
     private $key = null;
 
-    function __construct($secret_key)
+    /**
+     * 实例化类库
+     *
+     * @param string $secret_key 加密的安全码
+     *
+     * @return void
+     */
+    public function __construct($secret_key)
     {
         $this->td = mcrypt_module_open(MCRYPT_3DES, '', MCRYPT_MODE_ECB, '');
         $this->iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($this->td), MCRYPT_DEV_RANDOM);
@@ -30,8 +52,8 @@ class Data
     /**
      * 对字符串进行加密
      *
-     * @param string $string
-     *            要加密的字符串
+     * @param string $string 要加密的字符串
+     *
      * @return string
      */
     public function encode($string)
@@ -46,8 +68,8 @@ class Data
     /**
      * 要解密的字符串
      *
-     * @param string $string
-     *            需要解密的字符
+     * @param string $string 需要解密的字符
+     *
      * @return string
      */
     public function decode($string)
@@ -59,6 +81,11 @@ class Data
         return trim($data);
     }
 
+    /**
+     * 析构函数
+     *
+     * @return void
+     */
     public function __destruct()
     {
         if (is_resource($this->td))

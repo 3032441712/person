@@ -1,22 +1,37 @@
 <?php
 /**
  * 用户信息分类处理模型
- * @package Model
- * @author zhaoyan<1210965963@qq.com>
- * @version 1.0
+ *
+ * PHP version 5.4
+ *
+ * @category Model
+ * @package  Model
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168helps License
+ * @version  GIT: $Id
+ * @link     http://www.168helps.com/blog
  */
 namespace Model\Account;
 
 use Db\Local;
 
+/**
+ * Cat 类
+ *
+ * @category Model
+ * @package  Model
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168helps License
+ * @link     http://www.168helps.com/blog
+ */
 class Cat
 {
 
     /**
      * 录入分类信息
      *
-     * @param array $data
-     *            录入的数据
+     * @param array $data 录入的数据
+     *
      * @return int
      */
     public static function insert(array $data)
@@ -37,10 +52,9 @@ class Cat
     /**
      * 更新分类数据
      *
-     * @param array $data
-     *            更新的数据
-     * @param string $cid
-     *            分类ID
+     * @param array  $data 更新的数据
+     * @param string $cid  分类ID
+     *
      * @return void
      */
     public static function update($data, $cid)
@@ -61,8 +75,8 @@ class Cat
     /**
      * 删除分类
      *
-     * @param string $cid
-     *            分类ID
+     * @param string $cid 分类ID
+     *
      * @return void
      */
     public static function delete($cid)
@@ -85,10 +99,9 @@ class Cat
     /**
      * 根据分类ID获取分类数据
      *
-     * @param string $field
-     *            要检索的字段
-     * @param int $cid
-     *            分类ID
+     * @param string $field 要检索的字段
+     * @param int    $cid   分类ID
+     *
      * @return array
      */
     public static function getCatsDataById($field = '*', $cid)
@@ -115,10 +128,9 @@ class Cat
     /**
      * 获取分类数
      *
-     * @param int $root_id
-     *            根分类ID
-     * @param array $cat_data
-     *            分类数据
+     * @param int   $root_id  根分类ID
+     * @param array $cat_data 分类数据
+     *
      * @return array
      */
     public static function getCatTree($root_id, $cat_data = array())
@@ -141,10 +153,9 @@ class Cat
     /**
      * 获得分类数下的子分类
      *
-     * @param array $arr
-     *            分类数据
-     * @param int $cid
-     *            分类ID
+     * @param array &$arr 分类数据
+     * @param int   $cid  分类ID
+     *
      * @return array
      */
     public static function getCatTreeChildren(&$arr, $cid)
@@ -164,12 +175,15 @@ class Cat
     /**
      * 验证分类的标题是否符合规则
      * 
-     * @param string $title
-     *            字符数据
+     * @param string $title 字符数据
+     * @param int    $min   最小长度
+     * @param int    $max   最大长度
+     *
      * @return bool true/false
      */
     public static function isCatTitle($title, $min = 1, $max = 12)
     {
         return preg_match("/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]{{$min},{$max}}$/u", $title);
     }
+
 }

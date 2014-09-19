@@ -1,11 +1,18 @@
 <?php
-use Exception\App;
 /**
- * 个人信息管理系统
- * 
- * @author zhaoyan
- * @version 1.0
+ * 个人信息管理系统 入口页面
+ *
+ * PHP version 5.4
+ *
+ * @category Person
+ * @package  Person
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.16helps.com/blog/license.txt 16helps License
+ * @version  GIT: $Id
+ * @link     http://www.168helps.com/blog
  */
+use Exception\App;
+
 //opcache_reset();
 define('APP_NAME', '个人信息管理系统');
 define('APP_VERSION', '1.0');
@@ -19,6 +26,14 @@ date_default_timezone_set('Asia/Shanghai');
 
 require APP_ROOT . DIRECTORY_SEPARATOR . 'config.php';
 
+/**
+ * 自动加载类库的方法
+ *
+ * @param string $classname 类名称
+ *
+ * @return void
+ * @throw Exception
+ */
 function __autoload($classname)
 {
     if (class_exists($classname)) {
@@ -73,9 +88,9 @@ try {
     include $modulePathFile;
     ob_end_flush();
 } catch (App $e) {
-	echo $e->getMessage();
+    echo $e->getMessage();
 } catch (\PDOException $e) {
-	echo $e->getMessage();
+    echo $e->getMessage();
 } catch (\Exception $e) {
     echo $e->getMessage();
 }

@@ -1,24 +1,38 @@
 <?php
 /**
  * 用户信息处理模型
- * @package Model
- * @author zhaoyan<1210965963@qq.com>
- * @version 1.0
+ *
+ * PHP version 5.4
+ *
+ * @category Model
+ * @package  Model
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168heps.com/blog/license.txt 168heps License
+ * @version  GIT: $Id
+ * @link     http://www.168helps.com/blog
  */
 namespace Model;
 
 use Db\Local;
 
+/**
+ * User 类
+ *
+ * @category Model
+ * @package  Model
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  http://www.168helps.com/blog/license.txt 168heps License
+ * @link     http://www.168helps.com/blog
+ */
 class User
 {
 
     /**
      * 获取用户列表
      *
-     * @param int $page
-     *            当前页
-     * @param int $limit
-     *            每页数据显示条数
+     * @param int $page  当前页
+     * @param int $limit 每页数据显示条数
+     *
      * @return array
      */
     public static function getList($page = 1, $limit = 10)
@@ -37,8 +51,8 @@ class User
     /**
      * 根据用户ID获取用户信息
      *
-     * @param int $id
-     *            用户ID
+     * @param int $id 用户ID
+     *
      * @return array
      */
     public static function getUserDataById($id)
@@ -53,10 +67,9 @@ class User
     /**
      * 通过用户名来获取用户信息
      *
-     * @param string $field
-     *            查询的字段
-     * @param string $username
-     *            登录系统的用户名
+     * @param string $field    查询的字段
+     * @param string $username 登录系统的用户名
+     *
      * @return array
      */
     public static function getUserDataByUsername($field, $username)
@@ -80,6 +93,14 @@ class User
         return $data;
     }
 
+    /**
+     * 插入用户信息
+     *
+     * @param array $data 用户数据
+     *
+     * @return int
+     * @throw  Exception
+     */
     public static function insert(array $data)
     {
         $datetime = date('Y-m-d H:i:s');
@@ -102,10 +123,9 @@ class User
     /**
      * 进行数据更新
      *
-     * @param array $data
-     *            要更新的数据
-     * @param int $id
-     *            要更新的用户
+     * @param array $data 要更新的数据
+     * @param int   $id   要更新的用户
+     *
      * @return void
      */
     public static function update($data, $id)
@@ -126,12 +146,10 @@ class User
     /**
      * 验证登录用户名
      *
-     * @param string $username
-     *            数据字符串
-     * @param int $min
-     *            最小长度
-     * @param int $max
-     *            最大长度
+     * @param string $username 数据字符串
+     * @param int    $min      最小长度
+     * @param int    $max      最大长度
+     *
      * @return bool true/false
      */
     public static function isUsername($username, $min = 5, $max = 32)
@@ -142,12 +160,10 @@ class User
     /**
      * 验证登录密码
      *
-     * @param string $password
-     *            数据字符串
-     * @param int $min
-     *            最小长度
-     * @param int $max
-     *            最大长度
+     * @param string $password 数据字符串
+     * @param int    $min      最小长度
+     * @param int    $max      最大长度
+     *
      * @return bool true/false
      */
     public static function isPassword($password, $min = 5, $max = 32)
@@ -158,8 +174,8 @@ class User
     /**
      * 验证用户真实姓名是否符合规则
      *
-     * @param string $realname
-     *            数据字符
+     * @param string $realname 数据字符
+     *
      * @return bool true/false
      */
     public static function isRealName($realname)
@@ -171,8 +187,8 @@ class User
     /**
      * 验证性别是否符合规则
      *
-     * @param int $sex
-     *            字符数据
+     * @param int $sex 字符数据
+     *
      * @return true/false
      */
     public static function isSex($sex)
@@ -183,8 +199,8 @@ class User
     /**
      * 验证年龄是否符合规则
      *
-     * @param int $age
-     *            字符数据
+     * @param int $age 字符数据
+     *
      * @return bool true/false
      */
     public static function isAge($age)
@@ -196,12 +212,10 @@ class User
     /**
      * 验证邮箱是否符合规则
      *
-     * @param string $email
-     *            用户邮箱
-     * @param int $min
-     *            最小长度
-     * @param int $max
-     *            最大长度
+     * @param string $email 用户邮箱
+     * @param int    $min   最小长度
+     * @param int    $max   最大长度
+     *
      * @return bool true/false
      */
     public static function isEmail($email, $min = 5, $max = 64)
@@ -217,12 +231,10 @@ class User
     /**
      * 验证座机是否符合规则
      *
-     * @param string $phone
-     *            固定电话
-     * @param int $min
-     *            最小长度
-     * @param int $max
-     *            最大长度
+     * @param string $phone 固定电话
+     * @param int    $min   最小长度
+     * @param int    $max   最大长度
+     *
      * @return bool true/false
      */
     public static function isPhone($phone, $min = 7, $max = 8)
@@ -233,8 +245,8 @@ class User
     /**
      * 验证手机是否符合规则
      *
-     * @param int $mobile
-     *            字符数据
+     * @param int $mobile 字符数据
+     *
      * @return bool true/false
      */
     public static function isMobile($mobile)
@@ -245,12 +257,10 @@ class User
     /**
      * 验证QQ号是否符合规则
      * 
-     * @param int $qq
-     *            字符数据
-     * @param int $min
-     *            最小长度
-     * @param int $max
-     *            最大长度
+     * @param int $qq  字符数据
+     * @param int $min 最小长度
+     * @param int $max 最大长度
+     *
      * @return bool true/false
      */
     public static function isQQ($qq, $min = 5, $max = 13)
