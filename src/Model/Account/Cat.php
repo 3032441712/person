@@ -99,12 +99,12 @@ class Cat
     /**
      * 根据分类ID获取分类数据
      *
-     * @param string $field 要检索的字段
      * @param int    $cid   分类ID
+     * @param string $field 要检索的字段
      *
      * @return array
      */
-    public static function getCatsDataById($field = '*', $cid)
+    public static function getCatsDataById($cid, $field = '*')
     {
         $catData = Local::fetchOne('SELECT ' . $field . ' FROM z_account_cats WHERE cat_id=:cat_id LIMIT 1', array(
             ':cat_id' => $cid
@@ -185,5 +185,4 @@ class Cat
     {
         return preg_match("/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]{{$min},{$max}}$/u", $title);
     }
-
 }

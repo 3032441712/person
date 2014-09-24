@@ -1,5 +1,22 @@
 <?php
+/**
+ * 添加编辑用户信息,用户为系统登录用户.
+ * 1.添加编辑用户的表单.
+ * 2.对表单内容进行安全过滤,去除数据两侧空格.对每个字段进行数据验证.
+ * 3.表单令牌验证,防止跨网络攻击.
+ *
+ * PHP version 5.3
+ *
+ * @category user
+ * @package  user
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  https://github.com/3032441712/person/blob/master/LICENSE GNU License
+ * @version  GIT: $Id$
+ * @link     http://www.168helps.com/blog
+ */
 use Model\User;
+use Form\Response;
+
 $eid = isset($_GET['eid']) ? intval($_GET['eid']) : '';
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 
@@ -21,62 +38,58 @@ if ($act == 'save') {
     $data = array_map('trim', $data);
 
     if (User::isUsername($data['user_name']) == false) {
-        echo '{"code":"1","msg":"用户名不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '用户名不符合规则,请重新输入'), 1);
     }
 
     if ($eid > 0) {
         if ($data['user_pass'] != '' && User::isPassword($data['user_pass']) == false) {
-            echo '{"code":"1","msg":"密码不符合规则,请重新输入."}';
-            exit(0);
+            Response::json(array('msg' => '密码不符合规则,请重新输入'), 1);
         }
     } else {
         if (User::isPassword($data['user_pass']) == false) {
-            echo '{"code":"1","msg":"密码不符合规则,请重新输入."}';
-            exit(0);
+            Response::json(array('msg' => '密码不符合规则,请重新输入'), 1);
         }
     }
 
+    //真实姓名
     if ($data['user_real_name'] != '' && User::isRealName($data['user_real_name']) == false) {
-        echo '{"code":"1","msg":"输入的名字不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的名字不符合规则,请重新输入'), 1);
     }
 
+    //性别
     if ($data['user_sex'] != '' && User::isSex($data['user_sex']) == false) {
-        echo '{"code":"1","msg":"输入的性别不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的性别不符合规则,请重新输入'), 1);
     }
 
+    //年龄
     if ($data['user_age'] != 0 && User::isAge($data['user_age']) == false) {
-        echo '{"code":"1","msg":"输入的年龄不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的年龄不符合规则,请重新输入'), 1);
     }
 
+    //邮箱
     if ($data['user_email'] != '' && User::isEmail($data['user_email']) == false) {
-        echo '{"code":"1","msg":"输入的邮箱不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的邮箱不符合规则,请重新输入'), 1);
     }
 
+    //QQ号
     if ($data['user_qq'] != 0 && User::isQQ($data['user_qq']) == false) {
-        echo '{"code":"1","msg":"输入的QQ不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的QQ不符合规则,请重新输入'), 1);
     }
 
+    //电话
     if ($data['user_phone'] != 0 && User::isPhone($data['user_phone']) == false) {
-        echo '{"code":"1","msg":"输入的座机电话不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的座机电话不符合规则,请重新输入'), 1);
     }
 
+    //手机
     if ($data['user_mobile'] != 0 && User::isMobile($data['user_mobile']) == false) {
-        echo '{"code":"1","msg":"输入的手机号不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '输入的手机号不符合规则,请重新输入'), 1);
     }
 
     if ($eid > 0) {
         $user = User::getUserDataById($eid);
         if (isset($user['user_id']) == false) {
-            echo '{"code":"1","msg":"没有找到该用户."}';
-            exit(0);
+            Response::json(array('msg' => '没有找到该用户'), 1);
         }
 
         //密码为空,那么不对该数据进行编辑
@@ -94,8 +107,7 @@ if ($act == 'save') {
         unset($user);
         //没有需要进行更新的数据
         if (count($data) < 1) {
-            echo '{"code":"1","msg":"数据未更改,不需要进行更新."}';
-            exit(0);
+            Response::json(array('msg' => '数据未更改,不需要进行更新'), 1);
         }
 
         User::update($data, $eid);
@@ -103,8 +115,7 @@ if ($act == 'save') {
         User::insert($data);
     }
 
-    echo '{"code":"0","msg":"操作成功"}';
-    exit(0);
+    Response::json(array('msg' => '操作成功'), 0);
 }
 
 $formData = array();

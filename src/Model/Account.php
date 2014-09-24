@@ -42,7 +42,7 @@ class Account
             $input_params[':' . $k] = $v;
         }
         $sql = 'INSERT INTO z_accounts(' . implode(',', array_keys($data)) . ') VALUES (' . implode(',', array_keys($input_params)) . ')';
-        
+
         $statement = Local::query($sql, $input_params);
         $statement->closeCursor();
         return Local::getLastInsertId();
@@ -85,7 +85,7 @@ class Account
         $field = 'a.account_id,a.account_title,a.account_cat,a.user_id,a.acount_status,a.createtime,c.cat_title,u.user_name';
         $total = Local::fetchOne(str_replace('{FIELD}', 'COUNT(1) as total', $sql));
         $data = Local::fetchAll(str_replace('{FIELD}', $field, $sql) . ' LIMIT ' . ($page - 1) * $limit . ',' . $limit);
-        
+
         return array(
             'total' => $total['total'],
             'rows' => $data
@@ -95,12 +95,12 @@ class Account
     /**
      * 根据账户ID获取单条数据记录
      *
-     * @param string $field      检索的字段
      * @param int    $account_id 账户ID主键
+     * @param string $field      检索的字段
      *
      * @return array
      */
-    public static function getAccountById($field = '*', $account_id)
+    public static function getAccountById($account_id, $field = '*')
     {
         return Local::fetchOne('SELECT a.' . $field . ',c.cat_title FROM z_accounts a LEFT JOIN z_account_cats c ON a.account_cat=c.cat_id WHERE account_id=:account_id LIMIT 1', array(
             ':account_id' => $account_id

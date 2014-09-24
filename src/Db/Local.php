@@ -24,7 +24,6 @@ namespace Db;
  */
 class Local
 {
-
     /**
      * 实例化 Mysql
      *

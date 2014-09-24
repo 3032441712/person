@@ -16,6 +16,8 @@
  */
 use Model\User;
 use Util\Token;
+use Form\Response;
+
 if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $userPostData = isset($_POST['user']) && is_array($_POST['user']) ? $_POST['user'] : array();
     $userPostData = array_map('trim', $userPostData);
@@ -24,38 +26,31 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $password = isset($userPostData['pass']) ? $userPostData['pass'] : '';
 
     //进行表单令牌验证
-    if (Token::validate($_POST['token']) == fales) {
-        echo '{"code":"2", "token":"'.Token::create().'","msg":"非法访问,请刷新表单."}';
-        exit(0);
+    if (Token::validate($_POST['token']) === false) {
+        Response::json(array('msg' => '非法访问,请刷新表单'), 1);
     }
 
     if (User::isUsername($username) == false) {
-        echo '{"code":"1","msg":"账号不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '账号不符合规则,请重新输入'), 1);
     }
 
     if (User::isPassword($password) == false) {
-        echo '{"code":"1","msg":"密码不符合规则,请重新输入."}';
-        exit(0);
+        Response::json(array('msg' => '密码不符合规则,请重新输入'), 1);
     }
 
     $userData = User::getUserDataByUsername('user_id,user_pass', $username);
     if (isset($userData['user_id']) == false) {
-        echo '{"code":"1","msg":"您输入的帐号不存在,请重新输入"}';
-        exit(0);
+        Response::json(array('msg' => '您输入的帐号不存在,请重新输入'), 1);
     }
 
     if (md5($password) != $userData['user_pass']) {
-        echo '{"code":"1","msg":"您输入的密码有误,请重新输入"}';
-        exit(0);
+        Response::json(array('msg' => '您输入的密码有误,请重新输入'), 1);
     }
 
     $_SESSION['user_id'] = $userData['user_id'];
     $_SESSION['user_name'] = $username;
 
-    Token::create();
-    echo '{"code":"0","msg":"系统登录成功"}';
-    exit(0);
+    Response::json(array('msg' => '系统登录成功'), 0);
 }
 ?>
 <!DOCTYPE html>
@@ -126,7 +121,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
             </div>
             -->
             <div class="line">
-                <input type="hidden" id="tocken" name="tocken" value="<?php echo Token::Create(); ?>" />
+                <input type="hidden" id="token" name="token" value="<?php echo Token::Create(); ?>" />
                 <input id="login_btn" onclick="login_submit();" style="width: 100px; height: 25px; line-height: 25px; cursor: pointer;" type="button" value="登录系统" />
             </div>
             <?php else:?>
@@ -148,9 +143,7 @@ function login_submit()
 	$.post($('#login_form').attr('action'), $('#login_form').serialize(), function(data){
         var res = eval("("+data+")");
         if (res.code != 0) {
-            if (res.code == 2) {
-                $('#token').val(res.token);
-            }
+            $('#token').val(res.token);
             alert(res.msg);
             $('#login_btn').val('登录系统');
             $('#login_btn').attr('disabled', false);

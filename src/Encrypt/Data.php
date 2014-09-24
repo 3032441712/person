@@ -88,8 +88,9 @@ class Data
      */
     public function __destruct()
     {
-        if (is_resource($this->td))
+        if (is_resource($this->td)) {
             mcrypt_module_close($this->td);
+        }
 
         $this->td = null;
         $this->iv = null;

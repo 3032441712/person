@@ -1,5 +1,7 @@
 <?php
 use Model\Account\Cat;
+use Form\Response;
+
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 $catId = isset($_GET['cat_id']) ? $_GET['cat_id'] : 0;
 $parentId = isset($_GET['parent_id']) ? $_GET['parent_id'] : 0;
@@ -11,12 +13,12 @@ $catData = array('cat_id'=>'','cat_title'=>'');
 
 if ($act == 'add') {
     if ($parentId != 0) {
-        $catInfo = Cat::getCatsDataById('cat_id,cat_title', $parentId);
+        $catInfo = Cat::getCatsDataById($parentId, 'cat_id,cat_title');
     }
 } elseif ($act == 'edit') {
-    $catData = Cat::getCatsDataById('cat_id,cat_title,cat_parent', $catId);
+    $catData = Cat::getCatsDataById($catId, 'cat_id,cat_title,cat_parent');
     if ($catData['cat_parent'] != 0) {
-        $catInfo = Cat::getCatsDataById('cat_id,cat_title', $catData['cat_parent']);
+        $catInfo = Cat::getCatsDataById($catData['cat_parent'], 'cat_id,cat_title');
     }
 } elseif ($act == 'save') {
     $data = isset($_POST['category']) && is_array($_POST['category']) ? $_POST['category'] : array();
@@ -27,28 +29,24 @@ if ($act == 'add') {
 
     $saveData = array_map('trim', $saveData);
     if (Cat::isCatTitle($saveData['cat_title']) == false) {
-        echo '{"code":"1","msg":"分类名称填写有误,请重新填写."}';
-        exit(0);
+        Response::json(array('msg' => '分类名称填写有误,请重新填写'), 1);
     }
 
     if ($catId > 0) {
-        $catData = Cat::getCatsDataById('cat_id,cat_title', $catId);
+        $catData = Cat::getCatsDataById($catId, 'cat_id,cat_title');
         unset($saveData['cat_parent']);
         if ($catData['cat_title'] == $saveData['cat_title']) {
-            echo '{"code":"1","msg":"数据未更改"}';
-            exit(0);
+            Response::json(array('msg' => '数据未更改'), 1);
         }
 
         Cat::update($saveData, $catId);
     } else {
         Cat::insert($saveData);
     }
-    echo '{"code":"0","msg":"数据录入成功"}';
-    exit(0);
+    Response::json(array('msg' => '数据录入成功'), 0);
 } elseif ($act == 'delete') {
     Cat::delete($catId);
-    echo '{"code":"0","msg":"数据删除成功"}';
-    exit(0);
+    Response::json(array('msg' => '数据删除成功'), 0);
 }
 
 ?>

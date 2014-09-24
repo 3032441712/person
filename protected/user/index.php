@@ -1,8 +1,22 @@
-<?php 
+<?php
+/**
+ * 用户列表界面
+ * 1.列出符合检索规则的用户报表
+ * 2.操作功能项:添加 修改 删除.
+ *
+ * PHP version 5.3
+ *
+ * @category user
+ * @package  user
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  https://github.com/3032441712/person/blob/master/LICENSE GNU License
+ * @version  GIT: $Id$
+ * @link     http://www.168helps.com/blog
+ */
 use Model\User;
+
 $act = isset($_GET['act']) ? $_GET['act'] : '';
-if ($act == 'data')
-{
+if ($act == 'data') {
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
     $limit = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
 

@@ -46,6 +46,6 @@ class Token
      */
     public static function validate($token)
     {
-        return ($_SESSION['token'] == $toke) ? true : false;
+        return ($_SESSION['token'] === $token) ? true : false;
     }
 }

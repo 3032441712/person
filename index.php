@@ -56,13 +56,13 @@ try {
     $modulePath = APP_SCRIPT_PATH . DIRECTORY_SEPARATOR . $d;
     // 模块不存在
     if (file_exists($modulePath) == false) {
-        throw new App("Module Path {$modulePath} Not Found", App::NotFountDir);
+        throw new App("Module Path {$modulePath} Not Found", App::NOTFOUNTDIR);
     }
     
     $modulePathFile = $modulePath . DIRECTORY_SEPARATOR . $f . '.php';
     // 模块的脚本执行文件不存在
     if (file_exists($modulePathFile) == false) {
-        throw new App("Module File {$modulePath} Not Found", App::NotFountFile);
+        throw new App("Module File {$modulePath} Not Found", App::NOTFOUNTFILE);
     }
     
     //开启session

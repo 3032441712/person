@@ -1,5 +1,6 @@
 <?php 
 use Model\Account;
+
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 if ($act == 'data') {
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;

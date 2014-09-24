@@ -25,8 +25,8 @@ namespace Exception;
 class App extends \Exception
 {
     // 目录没有找到
-    const NotFountDir = 1000;
+    const NOTFOUNTDIR = 1000;
     
     // 文件没有找到
-    const NotFountFile = 1001;
+    const NOTFOUNTFILE = 1001;
 }

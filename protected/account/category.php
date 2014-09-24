@@ -1,5 +1,6 @@
 <?php 
 use Model\Account\Cat;
+
 $act = isset($_GET['act']) ? $_GET['act'] : '';
 if ($act == 'data') {
     $cats = Cat::getEasyUITreeData();

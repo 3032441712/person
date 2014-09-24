@@ -30,7 +30,7 @@ if ($act == 'save') {
 
     $data['account_content'] = $encrypt->encode($data['account_content']);
     if ($eid > 0) {
-    	$account = Account::getAccountById('*', $eid);
+    	$account = Account::getAccountById($eid, '*');
     	if (isset($account['account_id']) == false) {
     	    echo '{"code":"1","msg":"要更新的数据没有被找到"}';
     	    exit(0);
@@ -58,7 +58,7 @@ if ($act == 'save') {
 
 $buttonTitle = ($eid > 0 ? '编辑' : '添加');
 if ($eid > 0) {
-    $accountData = Account::getAccountById('*', $eid);
+    $accountData = Account::getAccountById($eid, '*');
     $accountData['account_content'] = $encrypt->decode($accountData['account_content']);
 } else {
     $accountData = Account::getTableAttribute();
