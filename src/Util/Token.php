@@ -9,7 +9,7 @@
  * @category Util
  * @package  Util
  * @author   zhaoyan <1210965963@qq.com>
- * @license  http://www.168helps.com/blog Private License
+ * @license  https://github.com/3032441712/person/blob/master/LICENSE GNU License
  * @version  GIT: $Id$
  * @link     http://www.168helps.com/blog
  */

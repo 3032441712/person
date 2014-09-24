@@ -7,8 +7,8 @@
  * @category Util
  * @package  Util
  * @author   zhaoyan <3032441712@qq.com>
- * @license  http://www.168helps.com/blog/license.txt 168helps License
- * @version  GIT: $Id
+ * @license  https://github.com/3032441712/person/blob/master/LICENSE GNU License
+ * @version  GIT: $Id$
  * @link     http://www.168helps.com/blog
  */
 namespace Util;
