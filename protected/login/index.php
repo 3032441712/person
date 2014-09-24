@@ -1,5 +1,21 @@
-<?php 
+<?php
+/**
+ * 用户登录页面
+ * 1.实现用户登录功能
+ * 2.验证码验证功能
+ * 3.表单令牌登录验证
+ *
+ * PHP version 5.3
+ *
+ * @category Login
+ * @package  Login
+ * @author   zhaoyan <1210965963@qq.com>
+ * @license  https://github.com/3032441712/person/blob/master/LICENSE GNU License
+ * @version  GIT: $Id$
+ * @link     http://www.168helps.com/blog
+ */
 use Model\User;
+use Util\Token;
 if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $userPostData = isset($_POST['user']) && is_array($_POST['user']) ? $_POST['user'] : array();
     $userPostData = array_map('trim', $userPostData);
@@ -7,9 +23,15 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $username = isset($userPostData['name']) ? $userPostData['name'] : '';
     $password = isset($userPostData['pass']) ? $userPostData['pass'] : '';
 
+    //进行表单令牌验证
+    if (Token::validate($_POST['token']) == fales) {
+        echo '{"code":"2", "token":"'.Token::create().'","msg":"非法访问,请刷新表单."}';
+        exit(0);
+    }
+
     if (User::isUsername($username) == false) {
         echo '{"code":"1","msg":"账号不符合规则,请重新输入."}';
-    	exit(0);
+        exit(0);
     }
 
     if (User::isPassword($password) == false) {
@@ -31,8 +53,9 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $_SESSION['user_id'] = $userData['user_id'];
     $_SESSION['user_name'] = $username;
 
+    Token::create();
     echo '{"code":"0","msg":"系统登录成功"}';
-    exit(0);    
+    exit(0);
 }
 ?>
 <!DOCTYPE html>
@@ -103,6 +126,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
             </div>
             -->
             <div class="line">
+                <input type="hidden" id="tocken" name="tocken" value="<?php echo Token::Create(); ?>" />
                 <input id="login_btn" onclick="login_submit();" style="width: 100px; height: 25px; line-height: 25px; cursor: pointer;" type="button" value="登录系统" />
             </div>
             <?php else:?>
@@ -124,11 +148,14 @@ function login_submit()
 	$.post($('#login_form').attr('action'), $('#login_form').serialize(), function(data){
         var res = eval("("+data+")");
         if (res.code != 0) {
+            if (res.code == 2) {
+                $('#token').val(res.token);
+            }
             alert(res.msg);
-        	$('#login_btn').val('登录系统');
-        	$('#login_btn').attr('disabled', false);
+            $('#login_btn').val('登录系统');
+            $('#login_btn').attr('disabled', false);
         } else {
-        	login_system();
+            login_system();
         }
 	});
 }
