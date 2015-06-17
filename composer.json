@@ -1,18 +1,25 @@
 {
-  "name" : "person",
-  "require" : {
-    "fxp/composer-asset-plugin" : "=v1.0.2",
-    "yiisoft/yii2" : "=2.0.4",
-    "yiisoft/yii2-app-advanced" : "=2.0.4",
-    "apache/thrift" : "=0.9.2"
-  },
- "repositories": [
-    {   
-        "packagist": false
-    },  
-    {   
-        "type": "composer", 
-        "url": "http://packagist.cn"
-    }   
-]
+    "name": "person",
+    "require": {
+        "fxp/composer-asset-plugin": "=v1.0.2",
+        "yiisoft/yii2": "=2.0.4",
+        "yiisoft/yii2-app-advanced": "=2.0.4",
+        "yiisoft/yii2-debug": "=2.0.4",
+        "yiisoft/yii2-gii": "=2.0.4"
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    },
+    "repositories": [
+        {
+            "packagist": false
+        },
+        {
+            "type": "composer",
+            "url": "http://packagist.cn"
+        }
+    ]
 }
